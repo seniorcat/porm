@@ -183,7 +183,7 @@ func (q queryStruct) prepareInsert() (qS string) {
 			}
 		}
 		qS += " VALUES ("
-		for i, _ := range q.insert {
+		for i := range q.insert {
 			qS += "$" + strconv.Itoa(i)
 			if i < li-1 {
 				qS += ", "
@@ -195,21 +195,25 @@ func (q queryStruct) prepareInsert() (qS string) {
 	return
 }
 
+// All get all rows from query
 func (p Porm) All() []map[string]string {
 	qS := p.q.prepare()
 	return p.GetDb().Query(qS)
 }
 
+// One get one row from query
 func (p Porm) One() map[string]string {
 	qS := p.q.prepare()
 	return p.GetDb().QueryRow(qS)
 }
 
+// Count get count from query
 func (p Porm) Count() int64 {
 	qS := p.q.prepare()
 	return p.GetDb().Count(qS)
 }
 
+// BulkInsert bulk insert from slice of map
 func (p Porm) BulkInsert(rows ...map[string]interface{}) {
 	ch := p.GetDb()
 	qS := p.q.prepareInsert()
